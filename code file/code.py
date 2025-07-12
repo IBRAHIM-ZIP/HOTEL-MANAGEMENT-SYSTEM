@@ -1,60 +1,101 @@
-import pymysql as a
-try:
-    connection = a.connect(host='localhost', user='root', password='Azra@9758547293', database='hotelmanagementproject')
-    print("Connected to the database successfully")
-except a.MySQLError:
-    print("Failed to connect to the database")
-y=connection.cursor()
+from tabulate import tabulate
+import pymysql as  a 
+b=a.connect (host="localhost",  user="root",  password="Azra@9758547293",  database="hotelmanagementproject")
+print(F"CONNECTED SUCCESSFULLY TO THE DATABASE")
+c=b.cursor()
+print(F"\n")
 
-#LETS WORK AS A START 
+#coding for admin
+print("**********WELCOME TO THE HOTEL SYSTEM***********")
+print("1.ADMIN")
+print("2.customer")
+print("3.staff")
+print("4.exit")
+choice=int(input("ENTER YOUR CHOICE: "))
 
-print("Welcome to the Hotel SONA MANAGEMENT SYSTEM")
-print("1. ADMIN")
-print("2. STAFF OR COUSTOMER")
-choice = int(input("Enter your choice: "))
-
-if choice ==1:
+if choice==1:
     while True:
-        print("1. Login as Admin")
-        print("2. Register as Admin")
-        print("3. Exit")
-        admin_choice = int(input("Enter your choice: "))
+        print("\n")
+        print("1.Login as admin")
+        print("2.register as admin")
+        print("3.exit")
+        print("\n")
+        admin_choice=int(input("ENTER YOUR CHOICE: "))
         
-        if admin_choice == 1:
-            username = input("Enter username: ")
-            password = input("Enter password: ")
-            # Here you would typically check the credentials against a database
-            if  password == "Azra@9758547293":
-                # Assuming the credentials are correct
-                print("Login successful!")
-                break
-            else:
-                print("Invalid credentials, please try again.")
-        elif admin_choice == 2:
-            print("Registration functionality not implemented yet.")
-        elif admin_choice == 3:
-            print("Exiting...")
-            exit()
-        else:
-            print("Invalid choice, please try again.")
+        if admin_choice==1:
+            username=input("ENTER YOUR USERNAME: ")
+            password=input("ENTER YOUR PASSWORD: ")
+            if username.lower() =="ibrahim khan" and password=="admin123":                               
+                while True:
+                    print("\n")
+                    print()
+                    print("************WELCOME TO ADMIN SECTION************")
+                    print("1.STAFF MANAGEMENT")
+                    print("2.RESTURANT MANAGEMENT")
+                    print("3.CUSTOMER MANAGEMENT")
+                    print("4.ROOM MANGEMENT")
+                    print("5.FEEDBACKS")
+                    print("6.exit")
+                    admin_choice2=int(input("ENTER YOUR CHOICE: "))
+                
+                    if admin_choice2==1:
+                        while True:
+                            print("\n")
+                            print("\n")
+                            print("1.VIEW STAFF")
+                            print("2.ADD STAFF")
+                            print("3.DELETE STAFF")
+                            print("4.select staff baised on condition")
+                            print("5.exit")
+                            enter_choice=int(input("ENTER YOUR CHOICE: "))
+                    
+                            if enter_choice==1:
+                            
+                                c.execute("select*from employes")
+                                data=c.fetchall()
+                                headers=[i[0] for i in c.description]
+                                print(tabulate(data,headers=headers,tablefmt="fancy_grid"))
+                            
+                                
+                            elif enter_choice==2:
+                                print("HOW MANY EMPLOYERS YOU WANT TO HIRE?")
+                                a=int(input("ENTER A NUMBER OF EMPLOYERS YOU WANT TO HIRE: "))
+                                for i in range(1,a+1):
+                                    NAME=input("ENTER A NAME: ")
+                                    DUTY=input("ENTER A DUTY: ")
+                                    DATE_OF_JOIN=input("ENTER DATE IN YYYY-MM-DD FORMAT KINDLY: ")
+                                    GENDER=input("ENTER A GENDER: ")
+                                    SHIFT=input("ENTER A SHIFT DAY OR NIGHT: ")
+                                    SALARY=int(input("ENTER A SALARY: "))
+                                    QUERY="""INSERT INTO EMPLOYES(NAME,DUTY, DATE_OF_JOIN,GENDER,SHIFT,SALARY) 
+                                           VALUES(%s,%s,%s,%s,%s,%s)"""
+                                    value=(NAME,DUTY,DATE_OF_JOIN,GENDER,SHIFT,SALARY,)
+                                    c.execute(QUERY,value)
+                                    b.commit()
+                                    print("✅ EMPLOYEE ADDED SUCCESSFULLY" )
 
-    print("welcome to the admin section")
-    print("1. staff management")
-    print("2. customer management")
-    print("3. room management")
-    print("4. booking management")
-    print("5.resturant management")
-    print(".exit")
-    admin_section_choice = int(input("Enter your choice: "))
-    if admin_section_choice == 1:
-        print("Welcome to the staff management section")
-        print("1. Add staff")
-        print("2. View staff")
-        print("3. Update staff")
-        print("4. Delete staff")
-        staff_choice = int(input("Enter your choice: "))
-        
-        if staff_choice == 1:
-            name = input("Enter staff name: ")
-            duty = input("Enter staff duty: ")
-            date_of_join = input("Enter date of join (YYYY-MM-DD): ")
+                            elif enter_choice==3:
+                                print("HOW MANY MEMBERS DO YOU WANT TO REMOVE FROM STAFF?")
+                                a=int(input("ENTER A NUMBER OF  STAFF MEMBER YOU WANT TO REMOVE: "))
+                                for i in range(1,a+1):
+                                    NAME=input("ENTER THE NAME OF MEMBER: ")
+                                    query="""select*from employes where NAME=(%s)"""
+                                    VALUE=(NAME)
+                                    c.execute(query,VALUE)
+                                    data=c.fetchall()
+                                    headers=[i[0] for i in c.description]
+                                    print(tabulate(data,headers=headers,tablefmt="fancy_grid"))
+                                    ID=int(input("ENTER THE Id OF THE EMPLOYES: "))
+                                    QUERY="""DELETE FROM EMPLOYES WHERE NAME=(%s) and ID=(%s)"""
+                                    VALUE=(NAME,ID)
+                                    c.execute(QUERY,VALUE)
+                                    b.commit()
+                                    
+                                print("✅ REMOVE SUCCESSFULLY")
+
+                            elif enter_choice==4:
+                                print("1.select staff by name")
+                                print("2.select staff by duty")
+                                print("3.select staff by Id")
+                                print("4.select staff                             
+                            
